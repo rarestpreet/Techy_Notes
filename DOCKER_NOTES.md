@@ -84,6 +84,8 @@ services:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: appdb
     ports:
+
+      # port on {localhost:container}
       - "3306:3306"
 
   app:
@@ -147,6 +149,42 @@ Logs:
 ```bash
 docker compose logs -f
 ```
+
+---
+
+## Additional 
+
+### 1) Why Docker Compose matters (for full stack)
+
+Your app is not “just Spring”; it needs MySQL too.
+
+Compose gave you:
+- One command to start **backend + frontend + mysql + other framworks/tools**
+- A shared network where containers can talk to each other
+- A clean definition of ports + environment variables in one file
+
+---
+
+### 2) Ports in application (how it should be)
+
+In your `docker-compose.yml`:
+
+Service: `XX:YY`
+  - **XX** is the port you type in the browser on your laptop
+  - **YY** is what Spring listens on *inside the container*
+
+---
+
+### 3) Service names are hostnames (Compose networking)
+
+In Compose, the service name becomes the hostname.
+
+So from the Spring container, the database is reachable at:
+
+- host: `mysql` (your service name)
+- port: `3306` (container port)
+
+That’s why **you do not use `localhost`** from one container to talk to another container.
 
 ---
 
